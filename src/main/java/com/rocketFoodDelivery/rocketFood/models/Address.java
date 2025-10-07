@@ -25,6 +25,7 @@ public class Address {
     private String street_address;
 
     @NotNull
+    @Column(nullable = false)
     private String city;
 
     @NotNull

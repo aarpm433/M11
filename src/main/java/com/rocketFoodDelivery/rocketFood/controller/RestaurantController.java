@@ -11,3 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RestaurantController {
 
 }
+
+// crud operations for html thymeleaf (@controller)
