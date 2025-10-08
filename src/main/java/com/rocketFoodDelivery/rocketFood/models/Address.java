@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 @Table(name = "addresses")
 public class Address {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
+    @Column(name = "street_address", nullable = false)
     private String street_address;
 
     @NotNull
@@ -29,11 +30,14 @@ public class Address {
     private String city;
 
     @NotNull
+    @Column(name = "postal_code", nullable = false)
     private String postal_code;
 
+    @NotNull
     @CreationTimestamp
     private LocalDateTime createdOn;
 
+    @NotNull
     @UpdateTimestamp
     private LocalDateTime updateOn;
 }

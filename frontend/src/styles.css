@@ -1,0 +1,8 @@
+body { font-family: Arial, sans-serif; padding: 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+.list { list-style: none; padding: 0; }
+.row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #eee; }
+.card { background: #fafafa; padding: 12px; margin: 12px 0; border: 1px solid #ddd; }
+.card div { margin-bottom: 8px; }
+.error { color: red; }
+.form-actions button { margin-right: 8px; }

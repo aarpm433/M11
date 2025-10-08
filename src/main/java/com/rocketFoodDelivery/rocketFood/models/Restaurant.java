@@ -1,8 +1,7 @@
 package com.rocketFoodDelivery.rocketFood.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
@@ -18,22 +17,31 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    // Relationship to User
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String address;
+    // Relationship to Address
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address_id", nullable = false, unique = true)
+    private Address address;
 
     @NotBlank
     @Column(nullable = false)
     private String phone;
 
-    @NotBlank
-    @Email
-    @Column(nullable = false, unique = true)
+    @Column
     private String email;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String name;
+
+    @Min(1)
+    @Max(3)
+    @Column(name = "price_range", nullable = false, columnDefinition = "int default 1")
+    private int priceRange = 1;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;

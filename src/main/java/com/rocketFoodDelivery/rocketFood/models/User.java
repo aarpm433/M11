@@ -1,12 +1,8 @@
 package com.rocketFoodDelivery.rocketFood.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -15,12 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private int id;
 
     @NotBlank
@@ -31,12 +24,4 @@ public class User {
     @Email
     @Column(nullable = false, unique = true)
     private String email;
-
-    @CreationTimestamp
-    @Column(name = "created_on", nullable = false, updatable = false)
-    private LocalDateTime createdOn;
-
-    @UpdateTimestamp
-    @Column(name = "updated_on", nullable = false)
-    private LocalDateTime updatedOn;
 }

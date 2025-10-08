@@ -17,9 +17,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
-    @Column(name = "restaurant_id", nullable = false)
-    private int restaurantId;
+    // Use relationship only, no need for separate restaurantId
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
     @NotBlank
     @Column(nullable = false)

@@ -1,7 +1,7 @@
 package com.rocketFoodDelivery.rocketFood.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
@@ -12,12 +12,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class OrderStatus {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
-    private String name; // e.g., "pending", "in progress", "delivered"
+    @Column(nullable = false)
+    private String name;
 }
