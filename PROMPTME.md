@@ -21,15 +21,14 @@
 ---
 
 ## ✏️ Prompt - 01
-
-**📎 Context:** Write what you were working on here
-
+why not blank istead of notnull
+**📎 Context:** 
+working on the models and wondering if 'NotBlank' was any different that 'Notnull'
 Paste your prompt or question here
 
 ## 🤖 Response - 01
 
-Paste the AI's answer here
-
+Notnull allows for whitespace while notblank requires at least one non whitespace character
 ---
 
 ## ✏️ Prompt - 02

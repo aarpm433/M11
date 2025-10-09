@@ -3,6 +3,7 @@ package com.rocketFoodDelivery.rocketFood.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "restaurants")
@@ -17,13 +18,11 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Relationship to User
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Relationship to Address
-    @ManyToOne(optional = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false, unique = true)
     private Address address;
 
@@ -40,9 +39,26 @@ public class Restaurant {
 
     @Min(1)
     @Max(3)
-    @Column(name = "price_range", nullable = false, columnDefinition = "int default 1")
+    @Column(name = "price_range", nullable = false)
     private int priceRange = 1;
 
-    @Column(nullable = false, columnDefinition = "boolean default true")
+    @Column(nullable = false)
     private boolean active = true;
+
+    @Column(name = "created_on", nullable = false, updatable = false)
+    private LocalDateTime createdOn;
+
+    @Column(name = "updated_on", nullable = false)
+    private LocalDateTime updatedOn;
+
+    @PrePersist
+    protected void onCreate() {
+        createdOn = LocalDateTime.now();
+        updatedOn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedOn = LocalDateTime.now();
+    }
 }

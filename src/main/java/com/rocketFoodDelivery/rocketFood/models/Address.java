@@ -23,7 +23,7 @@ public class Address {
 
     @NotNull
     @Column(name = "street_address", nullable = false)
-    private String street_address;
+    private String streetAddress;
 
     @NotNull
     @Column(nullable = false)
@@ -31,7 +31,7 @@ public class Address {
 
     @NotNull
     @Column(name = "postal_code", nullable = false)
-    private String postal_code;
+    private String postalCode;
 
     @NotNull
     @CreationTimestamp

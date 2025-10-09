@@ -11,12 +11,9 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    // Find restaurants by user
     Optional<Restaurant> findByUser(User user);
 
-    // Find restaurants by active status
     List<Restaurant> findByActive(boolean active);
 
-    // Optional: find by name containing keyword
     List<Restaurant> findByNameContainingIgnoreCase(String keyword);
 }

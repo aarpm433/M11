@@ -1,56 +1,74 @@
 package com.rocketFoodDelivery.rocketFood.controller;
 
+import com.rocketFoodDelivery.rocketFood.models.Address;
 import com.rocketFoodDelivery.rocketFood.models.Restaurant;
-import com.rocketFoodDelivery.rocketFood.repository.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import com.rocketFoodDelivery.rocketFood.service.AddressService;
+import com.rocketFoodDelivery.rocketFood.service.RestaurantService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/restaurants")
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/restaurants")
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantRepository repo;
+    private final RestaurantService restaurantService;
+    private final AddressService addressService;
 
     @GetMapping
-    public List<Restaurant> list() {
-        return repo.findAll();
+    public String listRestaurants(@RequestParam(value = "q", required = false) String query, Model model) {
+        List<Restaurant> restaurants = (query != null && !query.isEmpty())
+                ? restaurantService.searchByName(query)
+                : restaurantService.findAll();
+
+        List<Address> addresses = addressService.findAll();
+
+        // Ensure a non-null address for the form
+        Restaurant newRestaurant = new Restaurant();
+        newRestaurant.setAddress(new Address());
+
+        model.addAttribute("restaurants", restaurants);
+        model.addAttribute("restaurant", newRestaurant);
+        model.addAttribute("addresses", addresses);
+        return "restaurants";
     }
 
-    @GetMapping("/{id}")
-    public Restaurant get(@PathVariable int id) {
-        return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @GetMapping("/{id}/edit")
+    public String editRestaurant(@PathVariable int id, Model model) {
+        Restaurant r = restaurantService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        if (r.getAddress() == null) {
+            r.setAddress(new Address());
+        }
+
+        List<Address> addresses = addressService.findAll();
+        model.addAttribute("restaurant", r);
+        model.addAttribute("restaurants", restaurantService.findAll());
+        model.addAttribute("addresses", addresses);
+        return "restaurants";
     }
 
     @PostMapping
-    public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
-        // ensure id is null/0 to create
-        restaurant.setId(0);
-        Restaurant saved = repo.save(restaurant);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public String saveRestaurant(@ModelAttribute Restaurant restaurant) {
+        // Fetch the full Address object using selected ID
+        if (restaurant.getAddress() != null && restaurant.getAddress().getId() != 0) {
+            Address fullAddress = addressService.findById(restaurant.getAddress().getId())
+                    .orElseThrow(() -> new RuntimeException("Address not found"));
+            restaurant.setAddress(fullAddress);
+        }
+
+        restaurantService.saveRestaurant(restaurant);
+        return "redirect:/restaurants";
     }
 
-    @PutMapping("/{id}")
-    public Restaurant update(@PathVariable int id, @RequestBody Restaurant incoming) {
-        Restaurant existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        // copy mutable fields (adjust as needed)
-        existing.setName(incoming.getName());
-        existing.setPhone(incoming.getPhone());
-        existing.setEmail(incoming.getEmail());
-        existing.setPriceRange(incoming.getPriceRange());
-        existing.setActive(incoming.isActive());
-        // if using associations (user, address) you must set them appropriately here
-        return repo.save(existing);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        if (!repo.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        repo.deleteById(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{id}/delete")
+    public String deleteRestaurant(@PathVariable int id) {
+        restaurantService.deleteById(id);
+        return "redirect:/restaurants";
     }
 }
