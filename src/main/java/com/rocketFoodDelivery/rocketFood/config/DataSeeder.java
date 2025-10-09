@@ -37,7 +37,7 @@ public void seedData() {
 
     // Seed new data
     UserEntity user = UserEntity.builder()
-                    .name("John Doe")
+                    .username("John Doe")
                     .email("john.doe@codeboxx.com")
                     .password("password123")
                     .build();
