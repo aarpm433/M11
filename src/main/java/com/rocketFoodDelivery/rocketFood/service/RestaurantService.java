@@ -14,23 +14,29 @@ public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
 
+    // Find all restaurants
     public List<Restaurant> findAll() {
         return restaurantRepository.findAll();
     }
 
+    // Find by ID
     public Optional<Restaurant> findById(int id) {
         return restaurantRepository.findById(id);
     }
 
+    // Save or update restaurant
     public Restaurant saveRestaurant(Restaurant restaurant) {
+        // Ensure the restaurant has a valid address
+        if (restaurant.getAddress() == null) {
+            throw new RuntimeException("Restaurant must have an address");
+        }
+
+        // CascadeType.ALL ensures address is saved automatically
         return restaurantRepository.save(restaurant);
     }
 
+    // Delete by ID
     public void deleteById(int id) {
         restaurantRepository.deleteById(id);
-    }
-
-    public List<Restaurant> searchByName(String keyword) {
-        return restaurantRepository.findByNameContainingIgnoreCase(keyword);
     }
 }

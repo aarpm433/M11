@@ -51,14 +51,15 @@ public class Restaurant {
     @Column(name = "updated_on", nullable = false)
     private LocalDateTime updatedOn;
 
-    @PrePersist
-    protected void onCreate() {
-        createdOn = LocalDateTime.now();
-        updatedOn = LocalDateTime.now();
-    }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedOn = LocalDateTime.now();
-    }
+        @PrePersist
+            protected void onCreate() {
+                if (createdOn == null) createdOn = LocalDateTime.now();
+                if (updatedOn == null) updatedOn = LocalDateTime.now();
+            }
+
+            @PreUpdate
+            protected void onUpdate() {
+                updatedOn = LocalDateTime.now();
+        }
 }
